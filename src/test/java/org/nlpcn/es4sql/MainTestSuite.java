@@ -26,7 +26,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import static org.nlpcn.es4sql.TestsConstants.*;
-
+import org.elasticsearch.common.settings.Settings;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 		QueryTest.class,
@@ -48,8 +48,9 @@ public class MainTestSuite {
 
 	@BeforeClass
 	public static void setUp() throws Exception {
-
-        client = TransportClient.builder().addPlugin(DeleteByQueryPlugin.class).build().addTransportAddress(getTransportAddress());
+            Settings settings = Settings.settingsBuilder()
+                    .put("cluster.name", "cat-es").build();
+        client = TransportClient.builder().settings(settings).addPlugin(DeleteByQueryPlugin.class).build().addTransportAddress(getTransportAddress());
 
 
 		NodesInfoResponse nodeInfos = client.admin().cluster().prepareNodesInfo().get();
@@ -238,13 +239,14 @@ public class MainTestSuite {
 	}
 
 	private static InetSocketTransportAddress getTransportAddress() throws UnknownHostException {
-		String host = System.getenv("ES_TEST_HOST");
+		String host = "10.10.227.150";
 		String port = System.getenv("ES_TEST_PORT");
 
-		if(host == null) {
-			host = "localhost";
-			System.out.println("ES_TEST_HOST enviroment variable does not exist. choose default 'localhost'");
-		}
+//		if(host == null) {
+//			host = "localhost";
+//			System.out.println("ES_TEST_HOST enviroment variable does not exist. choose default 'localhost'");
+//		}
+
 
 		if(port == null) {
 			port = "9300";

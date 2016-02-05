@@ -462,7 +462,7 @@ public class AggMaker {
 
 		// Cardinality is approximate DISTINCT.
 		if ("DISTINCT".equals(field.getOption())) {
-            Integer precision_threshold = field.getParams().size()>1 ? (Integer)(field.getParams().get(1).value)  : 40000;
+            Integer precision_threshold = field.getParams().size()>1 ? (Integer)(field.getParams().get(1).value)  : 3000;
 			return AggregationBuilders.cardinality(field.getAlias()).precisionThreshold(precision_threshold).field(field.getParams().get(0).value.toString());
 		}
 
